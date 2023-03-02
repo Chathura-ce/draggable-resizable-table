@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #table-container {
+      position: relative;
+    }
+
+    #my-table {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      cursor: move;
+    }
+
+    body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f7f7f7;
+}
+
+#my-table {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-collapse: collapse;
+}
+
+#my-table th,
+#my-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+#my-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+#my-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#my-table tr:hover {
+  background-color: #ddd;
+}
+
+#my-table tr:first-child th:first-child {
+  border-top-left-radius: 5px;
+}
+
+#my-table tr:first-child th:last-child {
+  border-top-right-radius: 5px;
+}
+
+#my-table tr:last-child td:first-child {
+  border-bottom-left-radius: 5px;
+}
+
+#my-table tr:last-child td:last-child {
+  border-bottom-right-radius: 5px;
+}
+
+#my-table-resizer {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+  </style>
+</head>
+<body>
+  <div id="table-container">
+    <table id="my-table">
+      <tr>
+        <th>Column 1</th>
+        <th>Column 2</th>
+        <th>Column 3</th>
+      </tr>
+      <tr>
+        <td>Row 1, Column 1</td>
+        <td>Row 1, Column 2</td>
+        <td>Row 1, Column 3</td>
+      </tr>
+      <tr>
+        <td>Row 2, Column 1</td>
+        <td>Row 2, Column 2</td>
+        <td>Row 2, Column 3</td>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var table = document.getElementById('my-table');
+      var isDragging = false;
+      var lastX, lastY;
+
+      table.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        isDragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+      });
+
+      table.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+          var deltaX = e.clientX - lastX;
+          var deltaY = e.clientY - lastY;
+          var newLeft = table.offsetLeft + deltaX;
+          var newTop = table.offsetTop + deltaY;
+          table.style.left = newLeft + 'px';
+          table.style.top = newTop + 'px';
+          lastX = e.clientX;
+          lastY = e.clientY;
+        }
+      });
+
+      document.addEventListener('mouseup', function(e) {
+        isDragging = false;
+      });
+    });
+
+    var table = document.getElementById('my-table');
+var isResizing = false;
+var lastX, lastY;
+
+// Add event listeners to the bottom-right corner of the table
+var resizer = document.createElement('div');
+resizer.style.width = '10px';
+resizer.style.height = '10px';
+resizer.style.background = 'red';
+resizer.style.position = 'absolute';
+resizer.style.bottom = 0;
+resizer.style.right = 0;
+resizer.style.cursor = 'se-resize';
+table.appendChild(resizer);
+
+resizer.addEventListener('mousedown', function(e) {
+  e.preventDefault();
+  isResizing = true;
+  lastX = e.clientX;
+  lastY = e.clientY;
+});
+
+document.addEventListener('mousemove', function(e) {
+  if (isResizing) {
+    var deltaX = e.clientX - lastX;
+    var deltaY = e.clientY - lastY;
+    table.style.width = parseInt(getComputedStyle(table, '').width) + deltaX + 'px';
+    table.style.height = parseInt(getComputedStyle(table, '').height) + deltaY + 'px';
+    lastX = e.clientX;
+    lastY = e.clientY;
+  }
+});
+
+document.addEventListener('mouseup', function(e) {
+  isResizing = false;
+});
+
+  </script>
+</body>
+</html>
